@@ -1,0 +1,40 @@
+package springmvc.model.dao.jpa;
+
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+import org.springframework.stereotype.Repository;
+
+import springmvc.model.ReviewCommittee;
+import springmvc.model.dao.CommitteeDao;
+
+@Repository
+public class CommitteeDoaImpl implements CommitteeDao {
+
+	@PersistenceContext
+    private EntityManager entityManager;
+	
+
+	@Override
+	public int getReviewer(Integer id, List<Integer> comm) {
+		int ret = 0;
+		List<ReviewCommittee> results = entityManager.createQuery( "select s from ReviewCommittee s join s.reviewers i where i.id = :id", ReviewCommittee.class )
+	            .setParameter("id", id).getResultList();
+		for(Integer a : comm) {
+			boolean found = false;
+			for (ReviewCommittee e : results) {
+				if (e.getCommitteeId() == a)
+					found = true;
+			}
+			if (found == false) {
+				return -1;
+			}
+		}
+		System.out.println("return value" +ret);
+		return ret;
+		
+	}
+
+}

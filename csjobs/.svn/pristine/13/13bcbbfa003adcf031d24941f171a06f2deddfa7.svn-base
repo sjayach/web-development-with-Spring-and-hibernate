@@ -1,0 +1,68 @@
+package springmvc.model;
+
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+
+@Entity
+@Table(name = "college")
+public class College implements Serializable {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	
+	@Id
+	@GeneratedValue
+	@Column(name="dummyuniqueid")
+	private int id;
+	
+	private String univ;
+	private String degree;
+	private String year;
+	
+	@OneToOne
+	private JobApplication application;
+	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getUniv() {
+		return univ;
+	}
+	public void setUniv(String univ) {
+		this.univ = univ;
+	}
+	public String getDegree() {
+		return degree;
+	}
+	public void setDegree(String degree) {
+		this.degree = degree;
+	}
+	public String getYear() {
+		return year;
+	}
+	public void setYear(String year) {
+		this.year = year;
+	}
+	
+	public JobApplication getApplication() {
+		return application;
+	}
+	public void setApplication(JobApplication application) {
+		this.application = application;
+	}
+	
+
+}

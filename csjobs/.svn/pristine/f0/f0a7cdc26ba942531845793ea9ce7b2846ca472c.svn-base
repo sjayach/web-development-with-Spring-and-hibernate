@@ -1,0 +1,10 @@
+drop table users cascade;
+drop table authorities cascade;
+drop table jobs cascade;
+drop table job_committee_members cascade;
+drop table reviews cascade;
+drop table rounds cascade;
+drop table applications cascade;
+drop table application_degrees cascade;
+drop table files cascade;
+drop sequence hibernate_sequence;

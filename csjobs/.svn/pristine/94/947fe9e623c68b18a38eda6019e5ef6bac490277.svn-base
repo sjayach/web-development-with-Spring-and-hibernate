@@ -1,0 +1,38 @@
+package csjobs.web.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import csjobs.model.User;
+import csjobs.model.dao.UserDao;
+
+
+
+@Controller
+public class AdminReviewerController {
+
+	@Autowired
+	UserDao userDao;
+	@RequestMapping("/user/admin.html")
+	public String admin() {
+		return "user/admin";
+	}
+	
+	
+	@RequestMapping("/user/reviewer.html")
+	public String reviewer(@RequestParam String reviewerEmail, ModelMap models) {
+		User reviewer = userDao.getUser(reviewerEmail);
+		
+		if (reviewer == null)
+			return "redirect:login.html";
+		if(reviewer.getRoles().contains("REVIEWER"))
+			models.put("reviewer",reviewer.getFirstName());
+		else
+			return "redirect:login.html";
+		
+		return "user/reviewer";
+	}
+}

@@ -1,0 +1,30 @@
+package springmvc.model.dao.jpa;
+
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+import org.springframework.stereotype.Repository;
+
+import springmvc.model.JobApplication;
+import springmvc.model.dao.ApplicantDao;
+
+@Repository
+public class ApplicantDaoImpl implements ApplicantDao {
+
+	@PersistenceContext
+    private EntityManager entityManager;
+	
+	@Override
+	public int getApplicant(int applicantId, String jobtitle) {
+		List<JobApplication> app = entityManager.createQuery( "select c from JobApplication c join c.job i join c.applicantUser user where i.title = :jobtitle and user.id = :userid", JobApplication.class )
+			.setParameter("jobtitle", jobtitle).setParameter("userid", applicantId).getResultList();
+		if (app.size() == 1)
+			return 1;
+		
+		return -1;
+	}
+	
+
+}

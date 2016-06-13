@@ -1,0 +1,62 @@
+package csjobs.model.dao.jpa;
+
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import csjobs.model.Application;
+import csjobs.model.Job;
+import csjobs.model.User;
+import csjobs.model.dao.ApplicantDao;
+
+@Repository
+public class ApplicantDaoImpl implements ApplicantDao {
+
+	@PersistenceContext
+    private EntityManager entityManager;
+	
+	@Override
+	public List<Job> getAppliedJobs(String email) {
+		
+		return entityManager.createQuery( "select j from Job j where j in (select a.job from Application a join a.applicant app where app.email=:applicantEmail)", Job.class )
+	            .setParameter("applicantEmail", email).getResultList();
+	}
+
+	@Override
+	public List<Job> getAvailableJobs(String email) {
+		// TODO Auto-generated method stub
+		return entityManager.createQuery( "select j from Job j where j.publishDate is not null and ( j.closeDate >= CURRENT_DATE or j.closeDate is null) and j not in (select a.job from Application a join a.applicant app where app.email=:applicantEmail)", Job.class )
+	            .setParameter("applicantEmail", email).getResultList();
+	}
+
+	@Override
+	public Application getApplication(long id, String appEmail) {
+		// TODO Auto-generated method stub
+		return entityManager.createQuery("select app from Application app join app.job j join app.applicant user where j.id=:jobid and user.email=:userEmail", Application.class).setParameter("jobid", id).setParameter("userEmail", appEmail ).getSingleResult() ;
+	}
+
+	@Override
+	@Transactional
+	public Application apply(Application app) {
+		// TODO Auto-generated method stub
+		return entityManager.merge(app);
+	}
+
+	@Override
+	public User getUser(String email) {
+		String query = "from User where email='"+email+"'";
+		return entityManager.createQuery(query, User.class).getSingleResult();
+	}
+
+	@Override
+	public List<Application> isAlreadyApplied(long id, String appEmail) {
+		// TODO Auto-generated method stub
+		return entityManager.createQuery("select app from Application app join app.job j join app.applicant user where j.id=:jobid and user.email=:userEmail", Application.class).setParameter("jobid", id).setParameter("userEmail", appEmail).getResultList();
+
+	}
+
+}

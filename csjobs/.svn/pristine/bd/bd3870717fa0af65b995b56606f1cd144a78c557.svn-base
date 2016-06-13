@@ -1,0 +1,67 @@
+package springmvc.model;
+
+import java.io.Serializable;
+import java.util.Date;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "jobposition")
+public class JobPosition implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue
+	@Column(name="jobid")
+	private int id;
+	
+	private String title;
+	private String description;
+	private Date pubishDate;
+	private Date closeDate;
+	
+	/*@OneToMany
+	private List<UserInfo> job_reviewers;*/
+
+	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	public String getDescription() {
+		return description;
+	}
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	public Date getPubishDate() {
+		return pubishDate;
+	}
+	public void setPubishDate(Date pubishDate) {
+		this.pubishDate = pubishDate;
+	}
+	public Date getCloseDate() {
+		return closeDate;
+	}
+	public void setCloseDate(Date closeDate) {
+		this.closeDate = closeDate;
+	}
+	
+	
+
+}

@@ -1,0 +1,155 @@
+package springmvc.model;
+
+
+
+
+
+import java.io.Serializable;
+
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+
+@Entity
+@Table(name = "jobapplication")
+
+public class JobApplication implements Serializable {
+
+	
+
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	
+
+	@Id
+	@GeneratedValue
+	private int appid;
+	
+	@OneToOne
+	private UserInfo applicantUser;
+	
+	@OneToOne
+	private JobPosition job;
+	
+	@Embedded
+	private Address addressDetails;
+	
+	private String phone;
+	
+	private String currentJobTitle;
+	private String currentJobInst;
+	private int currentJobStartYear;
+	
+	private byte [] CV;
+	private byte [] researchStatement;
+	private byte [] teachingStatement;
+	
+	
+	
+
+	public Address getAddressDetails() {
+		return addressDetails;
+	}
+
+	public void setAddressDetails(Address addressDetails) {
+		this.addressDetails = addressDetails;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getCurrentJobTitle() {
+		return currentJobTitle;
+	}
+
+	public void setCurrentJobTitle(String currentJobTitle) {
+		this.currentJobTitle = currentJobTitle;
+	}
+
+	public String getCurrentJobInst() {
+		return currentJobInst;
+	}
+
+	public void setCurrentJobInst(String currentJobInst) {
+		this.currentJobInst = currentJobInst;
+	}
+
+	public int getCurrentJobStartYear() {
+		return currentJobStartYear;
+	}
+
+	public void setCurrentJobStartYear(int currentJobStartYear) {
+		this.currentJobStartYear = currentJobStartYear;
+	}
+
+	public byte [] getCV() {
+		return CV;
+	}
+
+	public void setCV(byte [] cV) {
+		this.CV = cV;
+	}
+
+	public byte [] getResearchStatement() {
+		return researchStatement;
+	}
+
+	public void setResearchStatement(byte [] researchStatement) {
+		this.researchStatement = researchStatement;
+	}
+
+	public byte [] getTeachingStatement() {
+		return teachingStatement;
+	}
+
+	public void setTeachingStatement(byte [] teachingStatement) {
+		this.teachingStatement = teachingStatement;
+	}
+
+	
+	public UserInfo getApplicationUser() {
+		return applicantUser;
+	}
+
+	public void setApplicationUser(UserInfo applicationUser) {
+		this.applicantUser = applicationUser;
+	}
+
+	public JobPosition getJob() {
+		return job;
+	}
+
+	public void setJob(JobPosition job) {
+		this.job = job;
+	}
+
+	public int getAppid() {
+		return appid;
+	}
+
+	public void setAppid(int appid) {
+		this.appid = appid;
+	}
+	
+	public UserInfo getApplicantUser() {
+		return applicantUser;
+	}
+
+	public void setApplicantUser(UserInfo applicantUser) {
+		this.applicantUser = applicantUser;
+	}
+
+}

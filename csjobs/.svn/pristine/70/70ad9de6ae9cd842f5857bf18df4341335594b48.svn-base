@@ -1,0 +1,17 @@
+package csjobs.model.dao;
+
+import java.util.List;
+
+import csjobs.model.Application;
+import csjobs.model.Job;
+import csjobs.model.User;
+
+public interface ApplicantDao {
+	
+	List<Job> getAppliedJobs(String email);
+	List<Job> getAvailableJobs(String email);
+	Application getApplication(long id, String userEmail);
+	Application apply(Application app);
+	User getUser(String email);
+	List<Application> isAlreadyApplied(long id, String userEmail);
+}

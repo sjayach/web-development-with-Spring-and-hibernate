@@ -1,0 +1,90 @@
+package springmvc.model;
+
+import java.util.Set;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="reviewprocess")
+public class ReviewProcess {
+	
+	@Id
+	@GeneratedValue
+	private int id;
+	
+	private int rounds;
+	private int rank;
+	private String comment;
+	
+	@ManyToMany
+	Set<JobPosition> reviewprocessjobs;
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getRounds() {
+		return rounds;
+	}
+
+	public void setRounds(int rounds) {
+		this.rounds = rounds;
+	}
+
+	public int getRank() {
+		return rank;
+	}
+
+	public void setRank(int rank) {
+		this.rank = rank;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+
+	public Set<JobPosition> getReviewprocessjobs() {
+		return reviewprocessjobs;
+	}
+
+	public void setReviewprocessjobs(Set<JobPosition> reviewprocessjobs) {
+		this.reviewprocessjobs = reviewprocessjobs;
+	}
+
+	public Set<JobApplication> getReviewapplicants() {
+		return reviewapplicants;
+	}
+
+	public void setReviewapplicants(Set<JobApplication> reviewapplicants) {
+		this.reviewapplicants = reviewapplicants;
+	}
+
+	public ReviewCommittee getCommittee() {
+		return committee;
+	}
+
+	public void setCommittee(ReviewCommittee committee) {
+		this.committee = committee;
+	}
+
+	@ManyToMany 
+	Set<JobApplication> reviewapplicants;
+	
+	@ManyToOne
+	private ReviewCommittee committee; 
+	
+
+}

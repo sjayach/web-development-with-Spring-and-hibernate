@@ -1,0 +1,22 @@
+package springmvc.model.dao;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
+import org.testng.annotations.Test;
+
+
+@Test(groups = "ApplicationDaoTest")
+@ContextConfiguration(locations = "classpath:applicationContext.xml")
+public class ApplicationDaoTest extends AbstractTransactionalTestNGSpringContextTests {
+	@Autowired
+	ApplicantDao applicantdao;
+	
+	@Test
+	public void getApplicant() {
+		
+		//getApplicants(applicantId, jobId)
+		assert applicantdao.getApplicant(6, "Tenure-Track Faculty Position (Start Fall 2015)") == 1;
+	}
+
+}

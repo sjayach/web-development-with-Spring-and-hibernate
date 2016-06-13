@@ -1,0 +1,28 @@
+package springmvc.model.dao;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
+import org.testng.annotations.Test;
+
+@Test(groups = "CommitteeDaoTest")
+@ContextConfiguration(locations = "classpath:applicationContext.xml")
+public class CommitteeDaoTest extends AbstractTransactionalTestNGSpringContextTests {
+	@Autowired
+	CommitteeDao committeedao;
+	
+	@Test
+	public void getReviewer()
+    {
+		// Add the commitee id to the list 
+		List<Integer> comm = new ArrayList<Integer>();
+		comm.add(1);
+		comm.add(2);
+		//getReviewer(reviewerId, list<committee>
+        assert  committeedao.getReviewer(3, comm) == 0;
+    }
+
+}

@@ -1,0 +1,9 @@
+package csjobs.model.dao;
+
+import csjobs.model.User;
+
+public interface UserDao {
+	
+	User getUser(String appEmail);
+
+}

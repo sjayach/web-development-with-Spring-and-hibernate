@@ -1,0 +1,36 @@
+package csjobs.web.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import csjobs.model.Job;
+import csjobs.model.dao.DisplayJobsDao;
+
+@Controller
+public class JobsController {
+
+	@Autowired
+	private DisplayJobsDao jobsDao;
+	
+	@RequestMapping({"/index.html", "/jobs/list.html"})
+	public String listJobs(ModelMap models) 
+	{
+		List<Job> jobs = jobsDao.getJobs();
+		models.put("jobs", jobs);
+		return "jobs/list";
+	}
+	
+	@RequestMapping("/jobs/view.html")
+	public String viewJob(@RequestParam Long id, ModelMap models) 
+	{
+		models.put("job", jobsDao.getJob(id));
+		return "jobs/view";
+		
+	}
+	
+}

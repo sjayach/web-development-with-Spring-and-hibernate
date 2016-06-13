@@ -1,0 +1,22 @@
+package springmvc.web.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import springmvc.model.dao.JobDao;
+
+@Controller
+public class JobController {
+	@Autowired
+	private JobDao JobDao;
+	@RequestMapping("/jobs.html")
+    public String users( ModelMap models )
+    {
+        models.put( "users", JobDao.getJobs() );
+        return "users";
+    }
+	
+
+}

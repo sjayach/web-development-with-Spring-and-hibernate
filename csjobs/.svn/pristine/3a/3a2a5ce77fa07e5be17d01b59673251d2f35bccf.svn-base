@@ -1,0 +1,8 @@
+package springmvc.model.dao;
+
+import java.util.List;
+
+public interface CommitteeDao {
+
+	int getReviewer(Integer id, List<Integer> comm);
+}

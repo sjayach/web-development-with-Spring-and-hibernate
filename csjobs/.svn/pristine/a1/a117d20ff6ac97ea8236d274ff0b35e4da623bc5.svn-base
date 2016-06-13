@@ -1,0 +1,307 @@
+    create table roleType (
+        roleid int4 not null,
+        role_type varchar(255),
+        primary key (roleid)
+    );
+
+INSERT INTO roletype(
+            roleid, role_type)
+    VALUES (1, 'admin');
+	
+	INSERT INTO roletype(
+            roleid, role_type)
+    VALUES (2, 'reviewer');
+	
+	INSERT INTO roletype(
+            roleid, role_type)
+    VALUES (3, 'applicant');
+	
+	
+	    create table userInfo (
+        userid int4 not null,
+        email varchar(255),
+        firstName varchar(255),
+        lastName varchar(255),
+        password varchar(255),
+        role_roleid int4,
+        primary key (userid)
+    );
+	
+	    alter table userInfo 
+        add constraint FK_jqb0wv13q449ssudnx3c5vx4h 
+        foreign key (role_roleid) 
+        references roleType;
+	
+	
+	
+	INSERT INTO userinfo(
+            userid, email, firstname, lastname, password, role_roleid)
+    VALUES (1, 'admin@localhost.localdomain', 'surenkumar', 'jayachandran', 'abcd', 1);
+
+INSERT INTO userinfo(
+            userid, email, firstname, lastname, password, role_roleid)
+    VALUES (2, 'reviewer1@localhost.localdomain', 'john', 'doe', 'abcd', 2);
+
+INSERT INTO userinfo(
+            userid, email, firstname, lastname, password, role_roleid)
+    VALUES (3, 'reviewer2@localhost.localdomain', 'joe', 'boxer', 'abcd', 2);
+
+INSERT INTO userinfo(
+            userid, email, firstname, lastname, password, role_roleid)
+    VALUES (4, 'reviewer3@localhost.localdomain', 'johnny', 'boxer', 'abcd', 2);
+
+
+INSERT INTO userinfo(
+            userid, email, firstname, lastname, password, role_roleid)
+    VALUES (5, 'reviewer4@localhost.localdomain', 'mary', 'boxer', 'abcd', 2);
+
+INSERT INTO userinfo(
+            userid, email, firstname, lastname, password, role_roleid)
+    VALUES (6, 'applicant1@localhost.localdomain', 'Michael', 'Johnson', 'abcd', 3);
+
+INSERT INTO userinfo(
+            userid, email, firstname, lastname, password, role_roleid)
+    VALUES (7, 'applicant2@localhost.localdomain', 'jessica', 'marie', 'abcd', 3);
+
+	
+	
+	    create table jobposition (
+        jobid int4 not null,
+        closeDate timestamp,
+        description varchar(255),
+        pubishDate timestamp,
+        title varchar(255),
+        primary key (jobid)
+    );
+	
+	
+	
+INSERT INTO jobposition(
+            jobid, closedate, description, pubishdate, title)
+    VALUES (1, to_date('1 AUG 2015', 'DD Mon YYYY'), 'This job posistion will start from Fall 2015', CURRENT_TIMESTAMP, 'Tenure-Track Faculty Position (Start Fall 2015)');
+
+
+INSERT INTO jobposition(
+            jobid, closedate, description, pubishdate, title)
+    VALUES (2, to_date('1 AUG 2016', 'DD Mon YYYY'), 'This job posistion will start from Fall 2016', CURRENT_TIMESTAMP, 'Tenure-Track Faculty Position (Start Fall 2016)');
+	
+	
+	
+	    create table reviewcommittee (
+        committeeId int4 not null,
+        chair_userid int4,
+        primary key (committeeId)
+		);
+		
+		alter table reviewcommittee 
+        add constraint FK_1cwa19i0c180xbn1rc6ytvf6w 
+        foreign key (chair_userid) 
+        references userInfo;
+	
+	
+	INSERT INTO reviewcommittee(
+            committeeid, chair_userid)
+    VALUES (1, 3);
+
+INSERT INTO reviewcommittee(
+            committeeid, chair_userid)
+    VALUES (2, 4);
+	
+	
+	    create table reviewcommittee_userInfo (
+        reviewcommittee_committeeId int4 not null,
+        reviewers_userid int4 not null,
+        primary key (reviewcommittee_committeeId, reviewers_userid)
+		);
+		
+		    alter table reviewcommittee_userInfo 
+        add constraint FK_6pj0jgt4wjt5jlx810efgd7wg 
+        foreign key (reviewers_userid) 
+        references userInfo;
+
+    alter table reviewcommittee_userInfo 
+        add constraint FK_rbq7he0dijc6pljm4k0httb8i 
+        foreign key (reviewcommittee_committeeId) 
+        references reviewcommittee;
+	
+	INSERT INTO reviewcommittee_userinfo(
+            reviewcommittee_committeeid, reviewers_userid)
+    VALUES (1, 2);
+
+INSERT INTO reviewcommittee_userinfo(
+            reviewcommittee_committeeid, reviewers_userid)
+    VALUES (1, 3);
+
+INSERT INTO reviewcommittee_userinfo(
+            reviewcommittee_committeeid, reviewers_userid)
+    VALUES (1, 4);
+
+INSERT INTO reviewcommittee_userinfo(
+            reviewcommittee_committeeid, reviewers_userid)
+    VALUES (2, 3);
+INSERT INTO reviewcommittee_userinfo(
+            reviewcommittee_committeeid, reviewers_userid)
+    VALUES (2, 4);
+INSERT INTO reviewcommittee_userinfo(
+            reviewcommittee_committeeid, reviewers_userid)
+    VALUES (2, 5);
+	
+	
+	create table reviewcommittee_jobposition (
+        reviewcommittee_committeeId int4 not null,
+        commiteejobs_jobid int4 not null,
+        primary key (reviewcommittee_committeeId, commiteejobs_jobid)
+    );
+	
+	    alter table reviewcommittee_jobposition 
+        add constraint UK_1chwi0t4ytxrwu26tyaybmeeb unique (commiteejobs_jobid);
+		
+		    alter table reviewcommittee_jobposition 
+        add constraint FK_1chwi0t4ytxrwu26tyaybmeeb 
+        foreign key (commiteejobs_jobid) 
+        references jobposition;
+
+    alter table reviewcommittee_jobposition 
+        add constraint FK_d3jnrmqwi3b1gq70cyhwa3d4x 
+        foreign key (reviewcommittee_committeeId) 
+        references reviewcommittee;
+	
+	
+	
+	INSERT INTO reviewcommittee_jobposition(
+            reviewcommittee_committeeid, commiteejobs_jobid)
+    VALUES (1, 1);
+
+INSERT INTO reviewcommittee_jobposition(
+            reviewcommittee_committeeid, commiteejobs_jobid)
+    VALUES (2, 2);
+	
+	
+	create table jobapplication (
+        appid int4 not null,
+        CV bytea,
+        city varchar(255),
+        state varchar(255),
+        street varchar(255),
+        zip int4 not null,
+        currentJobInst varchar(255),
+        currentJobStartYear int4 not null,
+        currentJobTitle varchar(255),
+        phone varchar(255),
+        researchStatement bytea,
+        teachingStatement bytea,
+        applicantUser_userid int4,
+        job_jobid int4,
+        primary key (appid)
+    );
+
+	    alter table jobapplication 
+        add constraint FK_h3xb5j87urh70hx2yxmivn0jj 
+        foreign key (applicantUser_userid) 
+        references userInfo;
+
+    alter table jobapplication 
+        add constraint FK_ew5043xhbiwvk5al3cc7p4j1t 
+        foreign key (job_jobid) 
+        references jobposition;
+	
+	
+	
+	INSERT INTO jobapplication(
+            appid, cv, city, state, street, zip, currentjobinst, currentjobstartyear, 
+            currentjobtitle, phone, researchstatement, teachingstatement, 
+            applicantuser_userid, job_jobid)
+    VALUES (1, 'cv1', 'El monte', 'CA', 'Baldwin Ave', '91731', 'CSULA', '2015', 
+            'Student', '3237476165', 'rs1', 'ts1', 
+            6, 1);
+
+INSERT INTO jobapplication(
+            appid, cv, city, state, street, zip, currentjobinst, currentjobstartyear, 
+            currentjobtitle, phone, researchstatement, teachingstatement, 
+            applicantuser_userid, job_jobid)
+    VALUES (2, 'cv2', 'Los Angeles', 'CA', 'flower/7th', '91701', 'CSULA', '2014', 
+            'Student', '3237476166', 'rs2', 'ts2', 
+            7, 1);
+			
+
+			
+			create table college (
+        dummyuniqueid int4 not null,
+        degree varchar(255),
+        univ varchar(255),
+        year varchar(255),
+        application_appid int4,
+        primary key (dummyuniqueid)
+    );
+	
+	    alter table college 
+        add constraint FK_jypaq3xjrj5x9lbmchoi96oho 
+        foreign key (application_appid) 
+        references jobapplication;
+		
+INSERT INTO college(
+            dummyuniqueid, degree, univ, year, application_appid)
+    VALUES (1, 'MS', 'CSULA', 2015, 1);
+    
+INSERT INTO college(
+            dummyuniqueid, degree, univ, year, application_appid)
+    VALUES (2, 'BE', 'SVCE', 2012, 1);
+
+INSERT INTO college(
+            dummyuniqueid, degree, univ, year, application_appid)
+    VALUES (3, 'MS', 'UCLA', 2014, 2);
+
+INSERT INTO college(
+            dummyuniqueid, degree, univ, year, application_appid)
+    VALUES (4, 'BE', 'UCS', 2012, 2);
+			
+			
+			
+
+			    create table reviewprocess (
+        id int4 not null,
+        comment varchar(255),
+        rank int4 not null,
+        rounds int4 not null,
+        committee_committeeId int4,
+        primary key (id)
+    );
+	
+	    alter table reviewprocess 
+        add constraint FK_f2fwoawderivg3fjnpnhymoea 
+        foreign key (committee_committeeId) 
+        references reviewcommittee;
+
+    create table reviewprocess_jobapplication (
+        reviewprocess_id int4 not null,
+        reviewapplicants_appid int4 not null,
+        primary key (reviewprocess_id, reviewapplicants_appid)
+    );
+	
+	    alter table reviewprocess_jobapplication 
+        add constraint FK_re23qx9g7bvo5nal22havow5j 
+        foreign key (reviewapplicants_appid) 
+        references jobapplication;
+
+    alter table reviewprocess_jobapplication 
+        add constraint FK_er0fx7y3v57gx79ihm5c6kax7 
+        foreign key (reviewprocess_id) 
+        references reviewprocess;
+
+    create table reviewprocess_jobposition (
+        reviewprocess_id int4 not null,
+        reviewprocessjobs_jobid int4 not null,
+        primary key (reviewprocess_id, reviewprocessjobs_jobid)
+    );
+	
+	    alter table reviewprocess_jobposition 
+        add constraint FK_68t8q5sa4gsq10kxpv4obk683 
+        foreign key (reviewprocessjobs_jobid) 
+        references jobposition;
+
+    alter table reviewprocess_jobposition 
+        add constraint FK_1alrrorli437e7nucy4376psy 
+        foreign key (reviewprocess_id) 
+        references reviewprocess;
+        
+         create sequence hibernate_sequence;

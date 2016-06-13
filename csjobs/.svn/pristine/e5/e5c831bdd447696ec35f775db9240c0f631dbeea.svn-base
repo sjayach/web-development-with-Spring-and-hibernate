@@ -1,0 +1,174 @@
+
+    create table college (
+        dummyuniqueid int4 not null,
+        degree varchar(255),
+        univ varchar(255),
+        year varchar(255),
+        application_appid int4,
+        primary key (dummyuniqueid)
+    );
+
+    create table jobapplication (
+        appid int4 not null,
+        CV bytea,
+        city varchar(255),
+        state varchar(255),
+        street varchar(255),
+        zip int4 not null,
+        currentJobInst varchar(255),
+        currentJobStartYear int4 not null,
+        currentJobTitle varchar(255),
+        phone varchar(255),
+        researchStatement bytea,
+        teachingStatement bytea,
+        applicantUser_userid int4,
+        job_jobid int4,
+        primary key (appid)
+    );
+
+    create table jobposition (
+        jobid int4 not null,
+        closeDate timestamp,
+        description varchar(255),
+        pubishDate timestamp,
+        title varchar(255),
+        primary key (jobid)
+    );
+
+    create table reviewcommittee (
+        committeeId int4 not null,
+        chair_userid int4,
+        primary key (committeeId)
+    );
+
+    create table reviewcommittee_jobposition (
+        reviewcommittee_committeeId int4 not null,
+        commiteejobs_jobid int4 not null,
+        primary key (reviewcommittee_committeeId, commiteejobs_jobid)
+    );
+
+    create table reviewcommittee_userInfo (
+        reviewcommittee_committeeId int4 not null,
+        reviewers_userid int4 not null,
+        primary key (reviewcommittee_committeeId, reviewers_userid)
+    );
+
+    create table reviewprocess (
+        id int4 not null,
+        comment varchar(255),
+        rank int4 not null,
+        rounds int4 not null,
+        committee_committeeId int4,
+        primary key (id)
+    );
+
+    create table reviewprocess_jobapplication (
+        reviewprocess_id int4 not null,
+        reviewapplicants_appid int4 not null,
+        primary key (reviewprocess_id, reviewapplicants_appid)
+    );
+
+    create table reviewprocess_jobposition (
+        reviewprocess_id int4 not null,
+        reviewprocessjobs_jobid int4 not null,
+        primary key (reviewprocess_id, reviewprocessjobs_jobid)
+    );
+
+    create table roleType (
+        roleid int4 not null,
+        role_type varchar(255),
+        primary key (roleid)
+    );
+
+    create table userInfo (
+        userid int4 not null,
+        email varchar(255),
+        firstName varchar(255),
+        lastName varchar(255),
+        password varchar(255),
+        role_roleid int4,
+        primary key (userid)
+    );
+
+    create table users (
+        id int4 not null,
+        enabled boolean not null,
+        password varchar(255),
+        username varchar(255),
+        primary key (id)
+    );
+
+    alter table reviewcommittee_jobposition 
+        add constraint UK_1chwi0t4ytxrwu26tyaybmeeb unique (commiteejobs_jobid);
+
+    alter table college 
+        add constraint FK_jypaq3xjrj5x9lbmchoi96oho 
+        foreign key (application_appid) 
+        references jobapplication;
+
+    alter table jobapplication 
+        add constraint FK_h3xb5j87urh70hx2yxmivn0jj 
+        foreign key (applicantUser_userid) 
+        references userInfo;
+
+    alter table jobapplication 
+        add constraint FK_ew5043xhbiwvk5al3cc7p4j1t 
+        foreign key (job_jobid) 
+        references jobposition;
+
+    alter table reviewcommittee 
+        add constraint FK_1cwa19i0c180xbn1rc6ytvf6w 
+        foreign key (chair_userid) 
+        references userInfo;
+
+    alter table reviewcommittee_jobposition 
+        add constraint FK_1chwi0t4ytxrwu26tyaybmeeb 
+        foreign key (commiteejobs_jobid) 
+        references jobposition;
+
+    alter table reviewcommittee_jobposition 
+        add constraint FK_d3jnrmqwi3b1gq70cyhwa3d4x 
+        foreign key (reviewcommittee_committeeId) 
+        references reviewcommittee;
+
+    alter table reviewcommittee_userInfo 
+        add constraint FK_6pj0jgt4wjt5jlx810efgd7wg 
+        foreign key (reviewers_userid) 
+        references userInfo;
+
+    alter table reviewcommittee_userInfo 
+        add constraint FK_rbq7he0dijc6pljm4k0httb8i 
+        foreign key (reviewcommittee_committeeId) 
+        references reviewcommittee;
+
+    alter table reviewprocess 
+        add constraint FK_f2fwoawderivg3fjnpnhymoea 
+        foreign key (committee_committeeId) 
+        references reviewcommittee;
+
+    alter table reviewprocess_jobapplication 
+        add constraint FK_re23qx9g7bvo5nal22havow5j 
+        foreign key (reviewapplicants_appid) 
+        references jobapplication;
+
+    alter table reviewprocess_jobapplication 
+        add constraint FK_er0fx7y3v57gx79ihm5c6kax7 
+        foreign key (reviewprocess_id) 
+        references reviewprocess;
+
+    alter table reviewprocess_jobposition 
+        add constraint FK_68t8q5sa4gsq10kxpv4obk683 
+        foreign key (reviewprocessjobs_jobid) 
+        references jobposition;
+
+    alter table reviewprocess_jobposition 
+        add constraint FK_1alrrorli437e7nucy4376psy 
+        foreign key (reviewprocess_id) 
+        references reviewprocess;
+
+    alter table userInfo 
+        add constraint FK_jqb0wv13q449ssudnx3c5vx4h 
+        foreign key (role_roleid) 
+        references roleType;
+
+    create sequence hibernate_sequence;

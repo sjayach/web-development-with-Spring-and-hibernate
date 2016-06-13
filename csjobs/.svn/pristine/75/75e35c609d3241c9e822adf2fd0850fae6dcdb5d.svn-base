@@ -1,0 +1,32 @@
+package csjobs.model.dao.jpa;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+import org.springframework.stereotype.Repository;
+
+import csjobs.model.User;
+import csjobs.model.dao.UserDao;
+
+@Repository
+public class UserDaoImpl implements UserDao {
+
+	@PersistenceContext
+    private EntityManager entityManager;
+
+	@Override
+	public User getUser(String userEmail) {
+		// TODO Auto-generated method stub
+		User user;
+		try {
+		System.out.println("try");
+		String query="from User where email='"+userEmail+"'";
+		user = entityManager.createQuery(query, User.class).getSingleResult();
+		}
+		catch(Exception e) {
+			System.out.println("catch");
+			user = null;
+		}
+		return user;
+	}
+}

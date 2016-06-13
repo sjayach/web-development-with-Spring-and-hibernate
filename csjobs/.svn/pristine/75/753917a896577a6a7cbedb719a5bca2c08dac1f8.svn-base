@@ -1,0 +1,26 @@
+package springmvc.model.dao;
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
+import org.testng.annotations.Test;
+
+
+@Test(groups = "CSJobsTest")
+@ContextConfiguration(locations = "classpath:applicationContext.xml")
+public class JobDaoTest extends AbstractTransactionalTestNGSpringContextTests  {
+	@Autowired
+	JobDao jobdao;
+	
+	
+	@Test
+	public void getJobs()
+    {
+        assert jobdao.getJobs().size() == 2;
+        
+        
+    }
+	
+
+}

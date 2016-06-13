@@ -1,0 +1,7 @@
+package springmvc.model.dao;
+
+public interface ApplicantDao {
+
+	int getApplicant(int applicantId, String jobtitle);
+	
+}

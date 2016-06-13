@@ -1,0 +1,12 @@
+drop table college cascade;
+drop table jobapplication cascade;
+drop table jobposition cascade;
+drop table reviewcommittee cascade;
+drop table reviewcommittee_jobposition cascade;
+drop table reviewcommittee_userInfo cascade;
+drop table reviewprocess cascade;
+drop table reviewprocess_jobapplication cascade;
+drop table reviewprocess_jobposition cascade;
+drop table roleType cascade;
+drop table userInfo cascade;
+drop sequence hibernate_sequence;

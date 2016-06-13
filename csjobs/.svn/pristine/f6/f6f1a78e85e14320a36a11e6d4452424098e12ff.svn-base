@@ -1,0 +1,110 @@
+package csjobs.web.controller;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import csjobs.model.Application;
+import csjobs.model.Degree;
+import csjobs.model.Job;
+import csjobs.model.User;
+import csjobs.model.dao.ApplicantDao;
+import csjobs.model.dao.DisplayJobsDao;
+import csjobs.model.dao.UserDao;
+import csjobs.web.validator.ApplicationValidator;
+
+@Controller
+public class ApplicantController {
+	
+	@Autowired
+	private ApplicantDao applicantDao;
+	@Autowired 
+	private DisplayJobsDao jobDao;
+	@Autowired 
+	private UserDao userDao;
+	
+	@Autowired
+	private ApplicationValidator applicationValidator;
+	
+	
+	
+	@RequestMapping(value="/applicant/view.html", method=RequestMethod.GET)
+	public String applicantView(ModelMap models, @RequestParam String appEmail) {
+		User applicant = userDao.getUser(appEmail);
+		if (applicant == null || !(applicant.getRoles().contains("APPLICANT")) ) {
+			System.out.println("something went wrong"+appEmail);
+			return "redirect:../user/login.html";
+		}
+		
+		List<Job> jobs = applicantDao.getAppliedJobs(appEmail);
+		List<Job> availablejobs = applicantDao.getAvailableJobs(appEmail);
+		models.put("appliedjobs", jobs);
+		models.put("availablejobs", availablejobs);
+		models.put("appEmail", appEmail);
+		if (availablejobs.size() == 0)
+			models.put("NoAvailableJobs", "No Jobs Available.");
+		return "applicant/view";
+	}
+	
+	@RequestMapping(value="/applicant/showApplication.html", method=RequestMethod.GET)
+	public String showApplication(@RequestParam Long id, @RequestParam String userEmail, ModelMap models) {
+		Application app = applicantDao.getApplication(id, userEmail);
+		models.put("app", app);
+		return "applicant/showApplication";
+	}
+	
+	@RequestMapping(value="/applicant/application.html", method=RequestMethod.GET)
+	public String Apply(@RequestParam long jobid, ModelMap models, @RequestParam String appEmail) {
+		
+		if (applicantDao.isAlreadyApplied(jobid, appEmail).size() > 0)
+			return "redirect:view.html?appEmail="+appEmail;
+		
+		models.put("application", new Application());
+		Job job =jobDao.getJob(jobid);
+		models.put("jobDetail", job);
+		models.put("jobTitle", job.getTitle());
+		System.out.println("get app email" +appEmail);
+		return "applicant/application";
+	}
+	
+	@RequestMapping(value="/applicant/application.html", method=RequestMethod.POST)
+	public String Apply(@RequestParam long jobid, @ModelAttribute Application application, BindingResult result, 
+						@RequestParam String appEmail, ModelMap models) {
+		
+		System.out.println("application degree" + application.getDegrees().size() + "something"+application.getCurrentJobYear());
+		application.setJob(jobDao.getJob(jobid));
+		System.out.println("app Email"+appEmail);
+		application.setApplicant(applicantDao.getUser(appEmail));
+		application.setSubmitDate(new Date());
+	
+		applicationValidator.validate(application, result);
+		
+		if (result.hasErrors()){
+			models.put("jobTitle", application.getJob().getTitle());
+			models.put("numdegrees", application.getDegrees().size() );
+			return "applicant/application";
+		}
+		
+		application = applicantDao.apply(application);
+		return "redirect:ApplicationSuccess.html?appEmail="+appEmail;
+	}
+	@RequestMapping("/applicant/ApplicationSuccess.html")
+	public String appSuccess(@RequestParam String appEmail) {
+		
+		return "applicant/ApplicationSuccess";
+	}
+	
+	
+
+}
